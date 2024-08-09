@@ -1,45 +1,63 @@
-Feature: Task List Management
-  Scenario: Add a new task to the task list
-    Given the task list is empty
-    When the user adds a task "Pick up dry cleaning"
-    Then the task list should contain "Pick up dry cleaning"
+Feature: To-Do List Management
 
-  Scenario: Display all tasks in the task list
-    Given the task list contains the following tasks:
-      | Task                |
-      | Pick up dry cleaning |
-      | Pay the electricity bill |
-    When the user lists all tasks
-    Then the output should include:
-      | Task                |
-      | Pick up dry cleaning |
-      | Pay the electricity bill |
+    @taskAddition
+    Scenario: Add a new task to the to-do list
+        Given the to-do list is currently empty
+        When a task "Buy groceries" is added by the user
+        Then "Buy groceries" should be present in the to-do list
 
-  Scenario: Mark a task as complete
-    Given the task list contains the following tasks:
-      | Task                | Status    |
-      | Pick up dry cleaning | Pending |
-    When the user marks the task "Pick up dry cleaning" as complete
-    Then the task list should display "Pick up dry cleaning" as completed
+    @taskListing
+    Scenario: Display all tasks in the to-do list
+        Given the to-do list has the following tasks:
+            | Task          |
+            | Buy groceries |
+            | Pay bills     |
+        When the user requests to see all tasks
+        Then the displayed tasks should include:
+            | Task          |
+            | Buy groceries |
+            | Pay bills     |
 
-  Scenario: Remove all tasks from the task list
-    Given the task list contains the following tasks:
-      | Task                |
-      | Pick up dry cleaning |
-      | Pay the electricity bill |
-    When the user clears all tasks
-    Then the task list should be empty
+    @taskCompletion
+    Scenario: Mark a specific task as completed
+        Given the to-do list includes:
+            | Task          | Status  |
+            | Buy groceries | Pending |
+        When the user marks "Buy groceries" as completed
+        Then the status of "Buy groceries" should be updated to completed
 
-  Scenario: Mark a task as in progress
-    Given the task list contains the following tasks:
-      | Task                | Status    |
-      | Pick up dry cleaning | Pending |
-    When the user marks the task "Pick up dry cleaning" as in progress
-    Then the task list should display "Pick up dry cleaning" as in progress
+    @taskClearing
+    Scenario: Remove all tasks from the to-do list
+        Given the to-do list contains:
+            | Task          |
+            | Buy groceries |
+            | Pay bills     |
+        When the user clears the entire to-do list
+        Then the to-do list should be completely empty
 
-  Scenario: Update a task's details
-    Given the task list contains the following tasks:
-      | Task                |
-      | Pick up dry cleaning |
-    When the user updates the task "Pick up dry cleaning" to "Pick up laundry"
-    Then the task list should contain "Pick up laundry"
+    @specificTaskRemoval
+    Scenario: Remove a specific task from the to-do list
+        Given the to-do list has:
+            | Task          | Status  |
+            | Buy groceries | Pending |
+        When the user removes "Buy groceries" from the list
+        Then "Buy groceries" should no longer appear in the to-do list
+
+    @taskPending
+    Scenario: Change a task status to pending
+        Given the to-do list has:
+            | Task          | Status    |
+            | Buy groceries | Completed |
+        When the user marks "Buy groceries" as pending
+        Then the status of "Buy groceries" should be shown as pending
+
+    @completedTasksListing
+    Scenario: Display only completed tasks
+        Given the to-do list has:
+            | Task          | Status    |
+            | Buy groceries | Completed |
+            | Pay bills     | Pending   |
+        When the user requests to see completed tasks
+        Then the displayed completed tasks should include:
+            | Task          |
+            | Buy groceries |

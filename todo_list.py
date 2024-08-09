@@ -1,69 +1,58 @@
-import os
-import csv
+task_list = []
 
+def add_task(name):
+    task_list.append((name, "Pending"))
 
-def clear_terminal():
-    # Para Windows
-    if os.name == 'nt':
-        os.system('cls')
-    # Para Unix (Linux, macOS)
+def display_tasks():
+    print("Index - Task - Status")
+    if task_list:
+        for index, (task, status) in enumerate(task_list):
+            print(f"{index + 1} - {task} - {status}")
     else:
-        os.system('clear')
+        print("No tasks available")
 
-# Clase que representa una tarea en la lista
-class TaskItem:
-    def __init__(self, description, status="Pending"):
-        self.description = description
-        self.status = status
+def complete_task(name):
+    display_tasks()
+    found = False
+    for index, (task, status) in enumerate(task_list):
+        if task == name:
+            task_list[index] = (name, "Completed")
+            found = True
+            break
 
-    def mark_complete(self):
-        self.status = "Completed"
-    
-    def mark_in_progress(self):
-        self.status = "In Progress"
+    if not found:
+        print(f'Task "{name}" not found.')
+    else:
+        display_tasks()
 
-    def __str__(self):
-        return f"{self.description} [{self.status}]"
+def remove_all_tasks():
+    task_list.clear()
 
-# Clase que gestiona la colección de tareas
-class TaskListManager:
-    def __init__(self, storage_file="task_list.csv"):
-        self.tasks = []
-        self.storage_file = storage_file
-        self.load_tasks()
+def show_menu():
+    print("Task Manager")
+    print("1. Add a task")
+    print("2. Show all tasks")
+    print("3. Mark a task as done")
+    print("4. Remove all tasks")
+    print("5. Exit")
 
-    def load_tasks(self):
-        if os.path.exists(self.storage_file):
-            with open(self.storage_file, mode='r') as file:
-                reader = csv.reader(file)
-                self.tasks = [TaskItem(description, status) for description, status in reader]
+def main():
+    show_menu()
+    option = int(input("Select an option: "))
+    while option != 5:
+        if option == 1:
+            task_name = input("Enter task name: ")
+            add_task(task_name)
+        elif option == 2:
+            display_tasks()
+        elif option == 3:
+            task_name = input("Enter task name to mark as done: ")
+            complete_task(task_name)
+        elif option == 4:
+            remove_all_tasks()
 
-    def save_tasks(self):
-        with open(self.storage_file, mode='w', newline='') as file:
-            writer = csv.writer(file)
-            for task in self.tasks:
-                writer.writerow([task.description, task.status])
+        show_menu()
+        option = int(input("Select an option: "))
 
-    def add_task(self, description):
-        new_task = TaskItem(description)
-        self.tasks.append(new_task)
-        self.save_tasks()
-
-    def list_tasks(self):
-        return self.tasks
-
-    def mark_task_complete(self, description):
-        for task in self.tasks:
-            if task.description == description:
-                task.mark_complete()
-                self.save_tasks()
-                return
-        raise ValueError("Task not found")
-    
-    def mark_task_in_progress(self, description):
-        for task in self.tasks:
-            if task.description == description:
-                task.mark_in_progress()
-                self.save_tasks()
-                return
-        raise ValueError("Task not found")
+if __name__ == "__main__":
+    main()
