@@ -1,63 +1,63 @@
-Feature: To-Do List Management
+Feature: Task Management
 
-    @taskAddition
-    Scenario: Add a new task to the to-do list
-        Given the to-do list is currently empty
-        When a task "Buy groceries" is added by the user
-        Then "Buy groceries" should be present in the to-do list
+    @addTask
+    Scenario: Add a task to the list
+        Given the task list is empty
+        When the user adds a task "Buy groceries"
+        Then the task list should include "Buy groceries"
 
-    @taskListing
-    Scenario: Display all tasks in the to-do list
-        Given the to-do list has the following tasks:
+    @listAll
+    Scenario: View all tasks
+        Given the task list contains tasks for listing
             | Task          |
             | Buy groceries |
             | Pay bills     |
-        When the user requests to see all tasks
-        Then the displayed tasks should include:
-            | Task          |
+        When the user displays all tasks
+        Then the output should show
+            | Tasks         |
             | Buy groceries |
             | Pay bills     |
 
-    @taskCompletion
-    Scenario: Mark a specific task as completed
-        Given the to-do list includes:
+    @markTaskCompleted
+    Scenario: Mark a task as completed
+        Given the task list contains tasks for marking completion
             | Task          | Status  |
             | Buy groceries | Pending |
-        When the user marks "Buy groceries" as completed
-        Then the status of "Buy groceries" should be updated to completed
+        When the user marks task "Buy groceries" as completed
+        Then the task list should show task "Buy groceries" as completed
 
-    @taskClearing
-    Scenario: Remove all tasks from the to-do list
-        Given the to-do list contains:
+    @clearList
+    Scenario: Clear the entire task list
+        Given the task list contains tasks for clearing
             | Task          |
             | Buy groceries |
             | Pay bills     |
-        When the user clears the entire to-do list
-        Then the to-do list should be completely empty
+        When the user removes all tasks
+        Then the task list should be empty
 
-    @specificTaskRemoval
-    Scenario: Remove a specific task from the to-do list
-        Given the to-do list has:
+    @clearSpecificTask
+    Scenario: Remove a specific task
+        Given the task list contains tasks for specific clearing
             | Task          | Status  |
             | Buy groceries | Pending |
-        When the user removes "Buy groceries" from the list
-        Then "Buy groceries" should no longer appear in the to-do list
+        When the user removes task "Buy groceries" from the list
+        Then the task list should not include task "Buy groceries"
 
-    @taskPending
-    Scenario: Change a task status to pending
-        Given the to-do list has:
+    @markTaskAsPending
+    Scenario: Mark a task as pending
+        Given the task list contains tasks with completed status
             | Task          | Status    |
             | Buy groceries | Completed |
-        When the user marks "Buy groceries" as pending
-        Then the status of "Buy groceries" should be shown as pending
+        When the user marks task "Buy groceries" as pending
+        Then the task list should show task "Buy groceries" as pending
 
-    @completedTasksListing
-    Scenario: Display only completed tasks
-        Given the to-do list has:
+    @listCompleted
+    Scenario: List completed tasks
+        Given the task list contains tasks for completed listing
             | Task          | Status    |
             | Buy groceries | Completed |
             | Pay bills     | Pending   |
-        When the user requests to see completed tasks
-        Then the displayed completed tasks should include:
-            | Task          |
+        When the user lists completed tasks
+        Then the output should show
+            | Tasks         |
             | Buy groceries |
